@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In – Fort Canning Dog Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ── Login Page Specific ────────────────────────────── */
+    body.login-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--cream);
+      background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .login-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 48px 44px 40px;
+      width: 100%;
+      max-width: 460px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative paw watermark */
+    .login-card::before {
+      content: "🐾";
+      font-size: 160px;
+      position: absolute;
+      bottom: -30px;
+      right: -20px;
+      opacity: 0.045;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      text-decoration: none;
+    }
+
+    .login-logo-icon {
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--green-light);
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-logo-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--green-deep);
+      line-height: 1.2;
+    }
+
+    .login-logo-sub {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      letter-spacing: 0.03em;
+    }
+
+    .login-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .login-heading em {
+      color: var(--green);
+      font-style: italic;
+    }
+
+    .login-sub {
+      font-size: 0.9rem;
+      color: var(--text-faint);
+      margin-bottom: 32px;
+    }
+
+    /* ── Form ── */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-input {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--cream);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-md);
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+      width: 100%;
+    }
+
+    .form-input::placeholder {
+      color: var(--text-faint);
+    }
+
+    .form-input:focus {
+      border-color: var(--green-mid);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(61,107,79,.1);
+    }
+
+    .form-forgot {
+      font-size: 0.8rem;
+      color: var(--green);
+      text-align: right;
+      margin-top: -8px;
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .form-forgot:hover {
+      color: var(--green-deep);
+      text-decoration: underline;
+    }
+
+    .btn-login {
+      background: var(--green);
+      color: var(--white);
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 14px 32px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(61,107,79,.28);
+      transition: background .18s, transform .12s, box-shadow .18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-login:hover {
+      background: var(--green-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(61,107,79,.35);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    /* ── Divider ── */
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0;
+      color: var(--text-faint);
+      font-size: 0.8rem;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--cream-border);
+    }
+
+    /* ── Register link ── */
+    .login-register {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1.5px solid var(--cream-border);
+    }
+
+    .login-register a {
+      color: var(--green);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .login-register a:hover {
+      color: var(--green-deep);
+      text-decoration: underline;
+    }
+
+    /* ── Paw trail decoration ── */
+    .paw-trail {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 24px;
+      opacity: 0.35;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+
+    /* ── Footer ── */
+    .login-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+
+    .login-footer a {
+      color: var(--green-mid);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      .login-card {
+        padding: 36px 24px 32px;
+        border-radius: var(--r-lg);
+      }
+    }
+  </style>
+</head>
+
+<body class="login-page">
+
+  <!-- Nav -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">
+          Fort Canning
+          <span class="nav-logo-sub">Dog Camp · Singapore</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="index.html#about" class="nav-link">About Us</a></li>
+        <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact Us</a></li>
+        <li class="nav-item"><a href="index.html#faqs" class="nav-link">FAQs</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="login.html" class="btn btn-ghost active">Log In</a>
+        <a href="registration/register.html" class="btn btn-outline">Register</a>
+      </div>
+      <button class="nav-burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About Us</a>
+    <a href="index.html#contact">Contact Us</a>
+    <a href="index.html#faqs">FAQs</a>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <a href="../login.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log In</a>
+      <a href="registration/register.html" class="btn btn-primary" style="width:100%;justify-content:center;">Register</a>
+    </div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="login-wrapper">
+    <div class="login-card">
+
+      <div class="paw-trail">🐾 🐾 🐾 🐾 🐾</div>
+
+      <h1 class="login-heading">Welcome <em>back!</em> 🐶</h1>
+      <p class="login-sub">Log in to manage your pup's profile and bookings.</p>
+
+      <div class="login-form">
+
+        <div class="form-group">
+          <label class="form-label" for="email">📧 Email address</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">🔒 Password</label>
+          <input
+            class="form-input"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+          <a href="#" class="form-forgot">Forgot your password?</a>
+        </div>
+
+        <button class="btn-login" type="submit">
+          Let's go! 🐾
+        </button>
+
+      </div>
+
+      <div class="login-register">
+        Not yet a member? <a href="registration/register.html">Register here! 🐕</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="login-footer">
+    © 2026 Fort Canning Dog Camp &nbsp;·&nbsp; Made with 🐾 in Singapore
+    &nbsp;·&nbsp; <a href="index.html#faqs">FAQs</a>
+  </div>
+
+  <script>
+    // Sticky nav shadow
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Mobile burger
+    const burger = document.getElementById('navBurger');
+    const mobileNav = document.getElementById('navMobile');
+    burger.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+
+</body>
+</html>
