@@ -53,42 +53,6 @@
       line-height: 1;
     }
 
-    .login-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      text-decoration: none;
-    }
-
-    .login-logo-icon {
-      font-size: 2rem;
-      width: 50px;
-      height: 50px;
-      background: var(--green-light);
-      border-radius: var(--r-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .login-logo-text {
-      font-family: 'Fraunces', serif;
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--green-deep);
-      line-height: 1.2;
-    }
-
-    .login-logo-sub {
-      display: block;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 0.78rem;
-      color: var(--text-faint);
-      letter-spacing: 0.03em;
-    }
-
     .login-heading {
       font-family: 'Fraunces', serif;
       font-size: clamp(1.6rem, 4vw, 2rem);
@@ -168,6 +132,18 @@
       color: var(--green-deep);
       text-decoration: underline;
     }
+    
+    /* Login Error Message */
+    .login-error {
+      display: none;
+      background: #fdecea;
+      color: #E05C4A;
+      border: 1px solid #f5c6cb;
+      padding: 10px 14px;
+      border-radius: var(--r-md);
+      font-size: 0.85rem;
+      text-align: center;
+    }
 
     .btn-login {
       background: var(--green);
@@ -198,24 +174,6 @@
 
     .btn-login:active {
       transform: translateY(0);
-    }
-
-    /* ── Divider ── */
-    .login-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 4px 0;
-      color: var(--text-faint);
-      font-size: 0.8rem;
-    }
-
-    .login-divider::before,
-    .login-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--cream-border);
     }
 
     /* ── Register link ── */
@@ -275,7 +233,6 @@
 
 <body class="login-page">
 
-  <!-- Nav -->
   <nav class="nav" id="mainNav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
@@ -307,12 +264,11 @@
     <a href="index.html#contact">Contact Us</a>
     <a href="index.html#faqs">FAQs</a>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-      <a href="../login.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log In</a>
+      <a href="login.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log In</a>
       <a href="registration/register.html" class="btn btn-primary" style="width:100%;justify-content:center;">Register</a>
     </div>
   </div>
 
-  <!-- Login Card -->
   <div class="login-wrapper">
     <div class="login-card">
 
@@ -321,7 +277,12 @@
       <h1 class="login-heading">Welcome <em>back!</em> 🐶</h1>
       <p class="login-sub">Log in to manage your pup's profile and bookings.</p>
 
-      <div class="login-form">
+      <form class="login-form" id="loginForm">
+        
+        <div class="login-error" id="loginError">
+          Incorrect email or password. <br>
+          <em>Hint: test@example.com / password123</em>
+        </div>
 
         <div class="form-group">
           <label class="form-label" for="email">📧 Email address</label>
@@ -330,7 +291,7 @@
             type="email"
             id="email"
             name="email"
-            placeholder="you@example.com"
+            placeholder="test@example.com"
             autocomplete="email"
             required
           >
@@ -343,7 +304,7 @@
             type="password"
             id="password"
             name="password"
-            placeholder="Enter your password"
+            placeholder="password123"
             autocomplete="current-password"
             required
           >
@@ -354,7 +315,7 @@
           Let's go! 🐾
         </button>
 
-      </div>
+      </form>
 
       <div class="login-register">
         Not yet a member? <a href="registration/register.html">Register here! 🐕</a>
@@ -389,6 +350,30 @@
         burger.classList.remove('open');
         document.body.style.overflow = '';
       });
+    });
+
+    // ── Login Logic ──
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Stop the page from reloading
+
+      const emailValue = document.getElementById('email').value;
+      const passwordValue = document.getElementById('password').value;
+
+      // Test Account Credentials
+      const TEST_EMAIL = "test@example.com";
+      const TEST_PASSWORD = "password123";
+
+      if (emailValue === TEST_EMAIL && passwordValue === TEST_PASSWORD) {
+        // Success: Hide error and redirect to Dashboard
+        loginError.style.display = 'none';
+        window.location.href = 'dashboard/index.html'; 
+      } else {
+        // Fail: Show error message
+        loginError.style.display = 'block';
+      }
     });
   </script>
 

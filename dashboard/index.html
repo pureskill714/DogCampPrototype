@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Fort Canning Dog Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    body {
+      background-color: var(--cream);
+      background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
+      background-size: 32px 32px;
+      padding-top: 100px; /* Space for fixed nav */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Welcome Header */
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dash-greeting {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .dash-greeting em {
+      color: var(--green);
+      font-style: italic;
+    }
+
+    .dash-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text-soft);
+      margin-top: 8px;
+    }
+
+    /* Grid Layout */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Dashboard Cards */
+    .dash-card {
+      background: var(--white);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Booking List */
+    .booking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .booking-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: var(--cream);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--cream-border);
+    }
+
+    .booking-date {
+      font-weight: 600;
+      color: var(--green-deep);
+    }
+
+    .booking-time {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 99px;
+      background: var(--green-light);
+      color: var(--green-deep);
+    }
+
+    /* Pup Profile Quick View */
+    .pup-avatar {
+      width: 80px;
+      height: 80px;
+      background: var(--amber-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      border: 2px solid var(--white);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .pup-info h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .pup-info p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .btn-action {
+      background: var(--green);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 12px 24px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
+      margin-top: 20px;
+    }
+
+    .btn-action:hover {
+      background: var(--green-deep);
+      transform: translateY(-2px);
+    }
+
+    /* ── Dropdown Nav Styles ── */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: var(--white);
+      min-width: 160px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid var(--cream-border);
+      border-radius: var(--r-md);
+      z-index: 100;
+      top: 100%;
+      left: 0;
+      overflow: hidden;
+      padding: 8px 0;
+    }
+
+    .dropdown-content a {
+      color: var(--text);
+      padding: 10px 20px;
+      text-decoration: none;
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: var(--cream);
+      color: var(--green-deep);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">
+          Fort Canning
+          <span class="nav-logo-sub">Dog Camp · Singapore</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-item"><a href="#" class="nav-link" style="color: var(--green); font-weight: 500;">Dashboard</a></li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">My Pups ▾</a>
+          <div class="dropdown-content">
+            <a href="#">Add New Pup</a>
+            <a href="#">View My Pups</a>
+          </div>
+        </li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">Bookings ▾</a>
+          <div class="dropdown-content">
+            <a href="#">Book Session</a>
+            <a href="#">Cancel Session</a>
+            <a href="#">Past Sessions</a>
+          </div>
+        </li>
+        
+        <li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="../index.html" class="btn btn-outline">Log Out</a>
+      </div>
+      <button class="nav-burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="#" style="color: var(--green); font-weight: 500;">Dashboard</a>
+    
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">My Pups</span>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Edit My Pups</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Bookings</span>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Book Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none;">↳ Cancel Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Past Sessions</a>
+    </div>
+
+    <a href="#">Profile</a>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <a href="../index.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log Out</a>
+    </div>
+  </div>
+
+  <main class="dashboard-container">
+    
+    <div class="dash-header">
+      <div>
+        <h1 class="dash-greeting">Welcome back, <em>Test User!</em> 👋</h1>
+        <p class="dash-sub">Here is what's happening with your pack today.</p>
+      </div>
+      <a href="#" class="btn-action">🎟️ Book New Session</a>
+    </div>
+
+    <div class="dash-grid">
+      
+      <div class="dash-card">
+        <h2 class="dash-card-title">📅 Upcoming Sessions</h2>
+        <div class="booking-list">
+          
+          <div class="booking-item">
+            <div>
+              <div class="booking-date">Saturday, April 18</div>
+              <div class="booking-time">Morning Trail Walk (9:00 AM - 11:00 AM)</div>
+            </div>
+            <div class="status-badge">Confirmed</div>
+          </div>
+
+          <div class="booking-item">
+            <div>
+              <div class="booking-date">Wednesday, April 22</div>
+              <div class="booking-time">Agility Training (3:00 PM - 5:00 PM)</div>
+            </div>
+            <div class="status-badge" style="background: var(--amber-light); color: #B25E02;">Pending</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="dash-card" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <h2 class="dash-card-title" style="margin-bottom: 24px;">🐕 Active Pup</h2>
+        
+        <div class="pup-avatar">
+          🦮
+        </div>
+        <div class="pup-info">
+          <h3>Buddy</h3>
+          <p>Golden Retriever · 3 Years</p>
+        </div>
+        
+        <a href="#" class="btn-action" style="background: var(--cream); color: var(--text); border: 1.5px solid var(--cream-border); width: 100%; justify-content: center;">
+          Edit Profile
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Sticky nav shadow
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Mobile burger
+    const burger = document.getElementById('navBurger');
+    const mobileNav = document.getElementById('navMobile');
+    burger.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    
+    // Close mobile nav when clicking a link
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        burger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+
+</body>
+</html>
