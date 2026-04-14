@@ -12,10 +12,10 @@
 
   <style>
     body {
-      background-color: var(--cream);
+      background-color: var(--cream, #F9F8F6);
       background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
       background-size: 32px 32px;
-      padding-top: 100px; /* Space for fixed nav */
+      padding-top: 100px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -29,7 +29,6 @@
       width: 100%;
     }
 
-    /* Welcome Header */
     .dash-header {
       display: flex;
       justify-content: space-between;
@@ -43,23 +42,22 @@
       font-family: 'Fraunces', serif;
       font-size: clamp(2rem, 5vw, 2.8rem);
       font-weight: 600;
-      color: var(--text);
+      color: var(--text, #2D2A26);
       line-height: 1.1;
     }
 
     .dash-greeting em {
-      color: var(--green);
+      color: var(--green, #3D6B4F);
       font-style: italic;
     }
 
     .dash-sub {
       font-family: 'DM Sans', sans-serif;
       font-size: 1.1rem;
-      color: var(--text-soft);
+      color: var(--text-soft, #5C5955);
       margin-top: 8px;
     }
 
-    /* Grid Layout */
     .dash-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -72,13 +70,12 @@
       }
     }
 
-    /* Dashboard Cards */
     .dash-card {
-      background: var(--white);
-      border: 1.5px solid var(--cream-border);
-      border-radius: var(--r-xl);
+      background: var(--white, #FFFFFF);
+      border: 1.5px solid var(--cream-border, #E8E5DF);
+      border-radius: var(--r-xl, 24px);
       padding: 32px;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-md, 0 8px 24px rgba(45,42,38,0.04));
       position: relative;
       overflow: hidden;
     }
@@ -87,14 +84,13 @@
       font-family: 'Fraunces', serif;
       font-size: 1.4rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text, #2D2A26);
       margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Booking List */
     .booking-list {
       display: flex;
       flex-direction: column;
@@ -106,19 +102,19 @@
       justify-content: space-between;
       align-items: center;
       padding: 16px;
-      background: var(--cream);
-      border-radius: var(--r-lg);
-      border: 1px solid var(--cream-border);
+      background: var(--cream, #F9F8F6);
+      border-radius: var(--r-lg, 16px);
+      border: 1px solid var(--cream-border, #E8E5DF);
     }
 
     .booking-date {
       font-weight: 600;
-      color: var(--green-deep);
+      color: var(--green-deep, #274734);
     }
 
     .booking-time {
       font-size: 0.85rem;
-      color: var(--text-soft);
+      color: var(--text-soft, #5C5955);
       margin-top: 4px;
     }
 
@@ -127,44 +123,18 @@
       font-weight: 600;
       padding: 6px 12px;
       border-radius: 99px;
-      background: var(--green-light);
-      color: var(--green-deep);
-    }
-
-    /* Pup Profile Quick View */
-    .pup-avatar {
-      width: 80px;
-      height: 80px;
-      background: var(--amber-light);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-      border: 2px solid var(--white);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    .pup-info h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .pup-info p {
-      font-size: 0.9rem;
-      color: var(--text-soft);
+      background: var(--green-light, #EAF3EC);
+      color: var(--green-deep, #274734);
     }
 
     .btn-action {
-      background: var(--green);
-      color: var(--white);
+      background: var(--green, #3D6B4F);
+      color: var(--white, #FFFFFF);
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
       font-weight: 600;
       border: none;
-      border-radius: var(--r-pill);
+      border-radius: var(--r-pill, 99px);
       padding: 12px 24px;
       cursor: pointer;
       display: inline-flex;
@@ -176,7 +146,7 @@
     }
 
     .btn-action:hover {
-      background: var(--green-deep);
+      background: var(--green-deep, #274734);
       transform: translateY(-2px);
     }
 
@@ -189,11 +159,11 @@
     .dropdown-content {
       display: none;
       position: absolute;
-      background-color: var(--white);
+      background-color: var(--white, #fff);
       min-width: 160px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 1px solid var(--cream-border);
-      border-radius: var(--r-md);
+      border: 1px solid var(--cream-border, #e5dfd3);
+      border-radius: var(--r-md, 8px);
       z-index: 100;
       top: 100%;
       left: 0;
@@ -202,7 +172,7 @@
     }
 
     .dropdown-content a {
-      color: var(--text);
+      color: var(--text, #333);
       padding: 10px 20px;
       text-decoration: none;
       display: block;
@@ -212,8 +182,8 @@
     }
 
     .dropdown-content a:hover {
-      background-color: var(--cream);
-      color: var(--green-deep);
+      background-color: var(--cream, #f7f5f0);
+      color: var(--green-deep, #2C4C38);
     }
 
     .dropdown:hover .dropdown-content {
@@ -234,7 +204,7 @@
         </div>
       </a>
       <ul class="nav-links">
-        <li class="nav-item"><a href="#" class="nav-link" style="color: var(--green); font-weight: 500;">Dashboard</a></li>
+        <li class="nav-item"><a href="index.html" class="nav-link" style="color: var(--green); font-weight: 500;">Dashboard</a></li>
         
         <li class="nav-item dropdown">
           <a href="#" class="nav-link">My Pups ▾</a>
@@ -265,11 +235,11 @@
   </nav>
 
   <div class="nav-mobile" id="navMobile">
-    <a href="#" style="color: var(--green); font-weight: 500;">Dashboard</a>
+    <a href="index.html" style="color: var(--green); font-weight: 500;">Dashboard</a>
     
     <div style="display: flex; flex-direction: column;">
       <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">My Pups</span>
-      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
+      <a href="addDog.html" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
       <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Edit My Pups</a>
     </div>
 
@@ -301,7 +271,6 @@
       <div class="dash-card">
         <h2 class="dash-card-title">📅 Upcoming Sessions</h2>
         <div class="booking-list">
-          
           <div class="booking-item">
             <div>
               <div class="booking-date">Saturday, April 18</div>
@@ -309,7 +278,6 @@
             </div>
             <div class="status-badge">Confirmed</div>
           </div>
-
           <div class="booking-item">
             <div>
               <div class="booking-date">Wednesday, April 22</div>
@@ -317,38 +285,32 @@
             </div>
             <div class="status-badge" style="background: var(--amber-light); color: #B25E02;">Pending</div>
           </div>
-
         </div>
       </div>
 
-      <div class="dash-card" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <h2 class="dash-card-title" style="margin-bottom: 24px;">🐕 Active Pup</h2>
+      <div class="dash-card" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <h2 class="dash-card-title" style="margin-bottom: 24px; width: 100%; display: flex; justify-content: space-between;">
+          <span>🐕 My Pups</span>
+        </h2>
         
-        <div class="pup-avatar">
-          🦮
-        </div>
-        <div class="pup-info">
-          <h3>Buddy</h3>
-          <p>Golden Retriever · 3 Years</p>
-        </div>
+        <div id="pupsListContainer" style="width: 100%; display: flex; flex-direction: column; gap: 16px;">
+          </div>
         
-        <a href="#" class="btn-action" style="background: var(--cream); color: var(--text); border: 1.5px solid var(--cream-border); width: 100%; justify-content: center;">
-          Edit Profile
+        <a href="addDog.html" class="btn-action" style="background: var(--cream); color: var(--text); border: 1.5px solid var(--cream-border); width: 100%; justify-content: center; margin-top: 24px;">
+          + Add New Pup
         </a>
       </div>
 
     </div>
-
   </main>
 
   <script>
-    // Sticky nav shadow
+    // Navigation Toggles
     const nav = document.getElementById('mainNav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 10);
     });
 
-    // Mobile burger
     const burger = document.getElementById('navBurger');
     const mobileNav = document.getElementById('navMobile');
     burger.addEventListener('click', () => {
@@ -357,7 +319,6 @@
       document.body.style.overflow = open ? 'hidden' : '';
     });
     
-    // Close mobile nav when clicking a link
     mobileNav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileNav.classList.remove('open');
@@ -365,6 +326,46 @@
         document.body.style.overflow = '';
       });
     });
+
+    // Dynamic Pups Logic
+    let myPups = JSON.parse(localStorage.getItem('campPups'));
+
+    // Initialize mock data if storage is empty
+    if (!myPups || myPups.length === 0) {
+      myPups = [
+        { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: '3 Years', avatar: '🦮' },
+        { id: 2, name: 'Luna', breed: 'Labrador Mix', age: '1 Year', avatar: '🐕' }
+      ];
+      localStorage.setItem('campPups', JSON.stringify(myPups));
+    }
+
+    const pupsContainer = document.getElementById('pupsListContainer');
+
+    function renderPups() {
+      pupsContainer.innerHTML = ''; 
+
+      myPups.forEach(pup => {
+        const pupElement = document.createElement('div');
+        pupElement.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--white); border: 1.5px solid var(--cream-border); border-radius: var(--r-lg); box-shadow: 0 2px 8px rgba(0,0,0,0.02);';
+        
+        pupElement.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 56px; height: 56px; font-size: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--cream); flex-shrink: 0;">
+              ${pup.avatar}
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 2px;">${pup.name}</h3>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text-soft);">${pup.breed} · ${pup.age}</p>
+            </div>
+          </div>
+          <a href="#" class="btn-action" style="padding: 8px 16px; font-size: 0.85rem; margin-top: 0;">Edit</a>
+        `;
+        
+        pupsContainer.appendChild(pupElement);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderPups);
   </script>
 
 </body>

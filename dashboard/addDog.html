@@ -10,50 +10,16 @@
   <link rel="stylesheet" href="../styles.css">
   
   <style>
-    /* ── Dropdown Nav Styles (Ensure these are in styles.css or kept here) ── */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: var(--white, #fff);
-      min-width: 160px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 1px solid var(--cream-border, #e5dfd3);
-      border-radius: var(--r-md, 8px);
-      z-index: 100;
-      top: 100%;
-      left: 0;
-      overflow: hidden;
-      padding: 8px 0;
-    }
-
-    .dropdown-content a {
-      color: var(--text, #333);
-      padding: 10px 20px;
-      text-decoration: none;
-      display: block;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .dropdown-content a:hover {
-      background-color: var(--cream, #f7f5f0);
-      color: var(--green-deep, #2C4C38);
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; background-color: var(--white, #fff); min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--cream-border, #e5dfd3); border-radius: var(--r-md, 8px); z-index: 100; top: 100%; left: 0; overflow: hidden; padding: 8px 0; }
+    .dropdown-content a { color: var(--text, #333); padding: 10px 20px; text-decoration: none; display: block; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+    .dropdown-content a:hover { background-color: var(--cream, #f7f5f0); color: var(--green-deep, #2C4C38); }
+    .dropdown:hover .dropdown-content { display: block; }
   </style>
 </head>
 <body>
 
-<nav class="nav" id="mainNav">
+  <nav class="nav" id="mainNav">
     <div class="nav-inner">
       <a href="../index.html" class="nav-logo">
         <div class="nav-logo-icon">🐾</div>
@@ -115,7 +81,6 @@
     </div>
   </div>
 
-
 <div class="page-hero">
   <div class="page-hero-inner">
     <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text-faint);margin-bottom:16px;transition:color .15s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-faint)'">
@@ -127,9 +92,8 @@
   </div>
 </div>
 
-
 <div class="form-page-body">
-  <form action="/submit-pup-profile" method="POST" enctype="multipart/form-data">
+  <form id="addDogForm">
 
     <fieldset>
       <legend>Basic Information</legend>
@@ -180,30 +144,21 @@
       <div class="field">
         <p class="field-label">Is your pup vaccinated? <span class="req">*</span></p>
         <div class="radio-group inline">
-          <label class="radio-option">
-            <input type="radio" name="vaccinated" value="Yes" required> Yes
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="vaccinated" value="No"> No
-          </label>
+          <label class="radio-option"><input type="radio" name="vaccinated" value="Yes" required> Yes</label>
+          <label class="radio-option"><input type="radio" name="vaccinated" value="No"> No</label>
         </div>
       </div>
 
       <div class="field">
         <p class="field-label">Is your pup sterilised? <span class="req">*</span></p>
         <div class="radio-group inline">
-          <label class="radio-option">
-            <input type="radio" name="sterilised" value="Yes" required> Yes
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="sterilised" value="No"> No
-          </label>
+          <label class="radio-option"><input type="radio" name="sterilised" value="Yes" required> Yes</label>
+          <label class="radio-option"><input type="radio" name="sterilised" value="No"> No</label>
         </div>
       </div>
 
       <div class="field">
         <label for="medicalConditions">Does your pup have any allergies, medical conditions, or take any medication?</label>
-        <small>Please include details and dosage if applicable.</small>
         <textarea id="medicalConditions" name="medicalConditions"></textarea>
       </div>
 
@@ -214,65 +169,31 @@
     </fieldset>
 
     <fieldset>
-      <legend>Additional Details</legend>
-
-      <div class="field">
-        <label for="pastExperience">Has your pup attended daycare, group play, or boarding before? How did it go?</label>
-        <textarea id="pastExperience" name="pastExperience"></textarea>
-      </div>
-
-      <div class="field">
-        <label for="pupPhotos">Upload photos of your pup</label>
-        <small>Tip: Front face + full body photos work best. Helps our team recognise them quickly on camp day!</small>
-        <input type="file" id="pupPhotos" name="pupPhotos" accept="image/*" multiple>
-      </div>
-    </fieldset>
-
-    <fieldset>
       <legend>Personality &amp; Preferences</legend>
 
       <div class="field">
         <label for="lovesDoing">What does your pup love doing most?</label>
-        <small>Examples: Chasing balls, sniffing everything, playing with other dogs, swimming, gentle cuddles…</small>
         <textarea id="lovesDoing" name="lovesDoing"></textarea>
       </div>
 
       <div class="field">
         <label for="nervousAbout">What makes your pup nervous or uncomfortable?</label>
-        <small>Examples: Loud noises, certain types of dogs, being picked up, water, fast movements…</small>
         <textarea id="nervousAbout" name="nervousAbout"></textarea>
-      </div>
-
-      <div class="field">
-        <label for="activitiesToAvoid">Are there any activities your pup should avoid?</label>
-        <small>Examples: Jumping, long runs in heat, rough play with small dogs, certain weather conditions…</small>
-        <textarea id="activitiesToAvoid" name="activitiesToAvoid"></textarea>
       </div>
 
       <div class="field">
         <p class="field-label">How would you describe your pup's energy level? <span class="req">*</span></p>
         <div class="radio-group">
-          <label class="radio-option">
-            <input type="radio" name="energyLevel" value="High" required>
-            High energy — always ready to run and explore
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="energyLevel" value="Medium">
-            Medium energy — balanced play and rest
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="energyLevel" value="Low">
-            Low / Calm energy — prefers gentle activities
-          </label>
+          <label class="radio-option"><input type="radio" name="energyLevel" value="High" required> High energy</label>
+          <label class="radio-option"><input type="radio" name="energyLevel" value="Medium"> Medium energy</label>
+          <label class="radio-option"><input type="radio" name="energyLevel" value="Low"> Low energy</label>
         </div>
       </div>
     </fieldset>
 
     <button type="submit">Submit Profile</button>
-
   </form>
 </div>
-
 
 <footer class="footer">
   <div class="footer-inner">
@@ -285,34 +206,7 @@
             <span class="nav-logo-sub">Singapore</span>
           </div>
         </div>
-        <p>Professional dog training in the heart of Singapore. Positive methods, real results, happy pups — rain or shine at Fort Canning Park.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Pages</h4>
-        <ul>
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="../index.html#about">About Us</a></li>
-          <li><a href="../index.html#programs">Programmes</a></li>
-          <li><a href="../index.html#contact">Contact</a></li>
-          <li><a href="../index.html#faqs">FAQs</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>My Dogs</h4>
-        <ul>
-          <li><a href="addDog.html">Add Dog Profile</a></li>
-          <li><a href="#">Edit Dog Profile</a></li>
-          <li><a href="#">My Bookings</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:hello@fortcanningdogcamp.sg">hello@fortcanningdogcamp.sg</a></li>
-          <li><a href="tel:+6591234567">+65 9123 4567</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Facebook</a></li>
-        </ul>
+        <p>Professional dog training in the heart of Singapore.</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -322,15 +216,10 @@
   </div>
 </footer>
 
-
 <script>
-  // ── Sticky nav ──
+  // Nav toggles
   const nav = document.getElementById('mainNav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 10);
-  });
-
-  // ── Mobile burger ──
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
   const burger = document.getElementById('navBurger');
   const mobileNav = document.getElementById('navMobile');
   burger.addEventListener('click', () => {
@@ -338,15 +227,8 @@
     burger.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
   });
-  mobileNav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      burger.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  });
 
-  // ── Other breed toggle ──
+  // Other breed toggle
   const breedSelect = document.getElementById('pupBreed');
   const otherContainer = document.getElementById('otherBreedContainer');
   breedSelect.addEventListener('change', function () {
@@ -358,6 +240,35 @@
       document.getElementById('otherBreed').required = false;
       document.getElementById('otherBreed').value = '';
     }
+  });
+
+  // Form Submission & LocalStorage Logic
+  const addDogForm = document.getElementById('addDogForm');
+  addDogForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Stop page reload
+
+    const pupName = document.getElementById('pupName').value;
+    let pupBreed = document.getElementById('pupBreed').value;
+    if (pupBreed === 'Other') pupBreed = document.getElementById('otherBreed').value;
+    const pupAge = document.getElementById('pupAge').value;
+
+    const newPup = {
+      id: Date.now(),
+      name: pupName,
+      breed: pupBreed,
+      age: pupAge,
+      avatar: '🐶' 
+    };
+
+    let existingPups = JSON.parse(localStorage.getItem('campPups')) || [
+      { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: '3 Years', avatar: '🦮' },
+      { id: 2, name: 'Luna', breed: 'Labrador Mix', age: '1 Year', avatar: '🐕' }
+    ];
+
+    existingPups.push(newPup);
+    localStorage.setItem('campPups', JSON.stringify(existingPups));
+
+    window.location.href = 'index.html'; // Redirect to dashboard
   });
 </script>
 
