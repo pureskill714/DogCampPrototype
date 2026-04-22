@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View My Pups – Fort Canning Dog Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  
+  <style>
+    body {
+      background-color: var(--cream, #F9F8F6);
+      background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
+      background-size: 32px 32px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 110px; /* <--- This line pushes the content down safely below the nav */
+    }
+
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; background-color: var(--white, #fff); min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--cream-border, #e5dfd3); border-radius: var(--r-md, 8px); z-index: 100; top: 100%; left: 0; overflow: hidden; padding: 8px 0; }
+    .dropdown-content a { color: var(--text, #333); padding: 10px 20px; text-decoration: none; display: block; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+    .dropdown-content a:hover { background-color: var(--cream, #f7f5f0); color: var(--green-deep, #2C4C38); }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Page Specific Styles */
+    .view-container {
+      max-width: 1000px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--text, #2D2A26);
+    }
+
+    .btn-add {
+      background: var(--green, #3D6B4F);
+      color: var(--white, #FFFFFF);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--r-pill, 99px);
+      padding: 10px 20px;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
+    }
+
+    .btn-add:hover {
+      background: var(--green-deep, #274734);
+      transform: translateY(-2px);
+    }
+
+    .pup-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pup-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white, #FFFFFF);
+      border: 1.5px solid var(--cream-border, #E8E5DF);
+      border-radius: var(--r-xl, 24px);
+      padding: 24px;
+      box-shadow: var(--shadow-sm, 0 4px 12px rgba(45,42,38,0.03));
+      transition: box-shadow 0.2s;
+    }
+
+    .pup-row:hover {
+      box-shadow: var(--shadow-md, 0 8px 24px rgba(45,42,38,0.06));
+    }
+
+    .pup-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .pup-avatar {
+      width: 64px;
+      height: 64px;
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--cream, #F9F8F6);
+      border: 1px solid var(--cream-border);
+      flex-shrink: 0;
+    }
+
+    .pup-details h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .pup-details p {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin: 0;
+    }
+
+    .pup-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 99px;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-bookings {
+      background: var(--green-light, #EAF3EC);
+      color: var(--green-deep, #274734);
+      border: 1px solid transparent;
+    }
+    .btn-bookings:hover { background: var(--green, #3D6B4F); color: white; }
+
+    .btn-edit {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--cream-border);
+    }
+    .btn-edit:hover { border-color: var(--green); color: var(--green); }
+
+    .btn-delete {
+      background: transparent;
+      color: #E05C4A;
+      border: 1px solid #f5c6cb;
+    }
+    .btn-delete:hover { background: #fdecea; border-color: #E05C4A; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--white);
+      border: 1.5px dashed var(--cream-border);
+      border-radius: var(--r-xl);
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 600px) {
+      .pup-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .pup-actions { width: 100%; }
+      .pup-actions .btn-sm { flex: 1; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">
+          Fort Canning
+          <span class="nav-logo-sub">Dog Camp · Singapore</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link" style="color: var(--green); font-weight: 500;">My Pups ▾</a>
+          <div class="dropdown-content">
+            <a href="addDog.html">Add New Pup</a>
+            <a href="viewDog.html" style="color: var(--green); font-weight: 500;">View My Pups</a>
+          </div>
+        </li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">Bookings ▾</a>
+          <div class="dropdown-content">
+            <a href="#">Book Session</a>
+            <a href="#">Cancel Session</a>
+            <a href="#">Past Sessions</a>
+          </div>
+        </li>
+        
+        <li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="../index.html" class="btn btn-outline">Log Out</a>
+      </div>
+      <button class="nav-burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="index.html">Dashboard</a>
+    
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--green); font-weight: 500; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">My Pups</span>
+      <a href="addDog.html" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
+      <a href="viewDog.html" style="padding-left: 16px; font-size: 0.9rem; color: var(--green);">↳ View My Pups</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Bookings</span>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Book Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none;">↳ Cancel Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Past Sessions</a>
+    </div>
+
+    <a href="#">Profile</a>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <a href="../index.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log Out</a>
+    </div>
+  </div>
+
+  <main class="view-container">
+    <div class="page-header">
+      <h1 class="page-title">My Pups</h1>
+      <a href="addDog.html" class="btn-add">Add New Pup</a>
+    </div>
+
+    <div class="pup-list" id="pupListContainer">
+      </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:16px;">
+            <div class="nav-logo-icon">🐾</div>
+            <div class="nav-logo-text" style="color:white;">
+              Fort Canning Dog Camp
+              <span class="nav-logo-sub">Singapore</span>
+            </div>
+          </div>
+          <p>Professional dog training in the heart of Singapore.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fort Canning Dog Camp. All rights reserved.</span>
+        <span class="footer-paw">Made with 🐾 in Singapore</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navigation Toggles
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
+    const burger = document.getElementById('navBurger');
+    const mobileNav = document.getElementById('navMobile');
+    burger.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    // CRUD Logic: Read and Delete
+    const container = document.getElementById('pupListContainer');
+
+    function loadPups() {
+      let myPups = JSON.parse(localStorage.getItem('campPups')) || [];
+      container.innerHTML = ''; // Clear existing content
+
+      if (myPups.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 16px;">🦴</div>
+            <h3 style="font-family: 'Fraunces'; font-size: 1.4rem; color: var(--text); margin-bottom: 8px;">No pups found</h3>
+            <p>You haven't added any dogs to your profile yet.</p>
+          </div>
+        `;
+        return;
+      }
+
+      myPups.forEach(pup => {
+        const row = document.createElement('div');
+        row.className = 'pup-row';
+        
+        row.innerHTML = `
+          <div class="pup-info">
+            <div class="pup-avatar">${pup.avatar || '🐶'}</div>
+            <div class="pup-details">
+              <h3>${pup.name}</h3>
+              <p>${pup.breed} · ${pup.age}</p>
+            </div>
+          </div>
+          <div class="pup-actions">
+            <a href="#" class="btn-sm btn-bookings">📅 Bookings</a>
+            <a href="editDog.html?id=${pup.id}" class="btn-sm btn-edit">✎ Edit</a>
+            <button onclick="deletePup(${pup.id})" class="btn-sm btn-delete">🗑 Delete</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // Global function so the inline onclick handler can access it
+    window.deletePup = function(pupId) {
+      const confirmDelete = confirm("Are you sure you want to remove this pup from your profile?");
+      if (confirmDelete) {
+        let myPups = JSON.parse(localStorage.getItem('campPups')) || [];
+        // Filter out the pup with the matching ID
+        myPups = myPups.filter(pup => pup.id !== pupId);
+        // Save the updated array back to local storage
+        localStorage.setItem('campPups', JSON.stringify(myPups));
+        // Re-render the list visually
+        loadPups();
+      }
+    };
+
+    // Initial render on page load
+    document.addEventListener('DOMContentLoaded', loadPups);
+  </script>
+</body>
+</html>
