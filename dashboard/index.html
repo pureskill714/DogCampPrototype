@@ -150,7 +150,6 @@
       transform: translateY(-2px);
     }
 
-    /* ── Dropdown Nav Styles ── */
     .dropdown {
       position: relative;
       display: inline-block;
@@ -240,7 +239,7 @@
     <div style="display: flex; flex-direction: column;">
       <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">My Pups</span>
       <a href="addDog.html" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
-      <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Edit My Pups</a>
+      <a href="#">↳ Edit My Pups</a>
     </div>
 
     <div style="display: flex; flex-direction: column;">
@@ -294,7 +293,7 @@
         </h2>
         
         <div id="pupsListContainer" style="width: 100%; display: flex; flex-direction: column; gap: 16px;">
-          </div>
+        </div>
         
         <a href="addDog.html" class="btn-action" style="background: var(--cream); color: var(--text); border: 1.5px solid var(--cream-border); width: 100%; justify-content: center; margin-top: 24px;">
           + Add New Pup
@@ -348,6 +347,7 @@
         const pupElement = document.createElement('div');
         pupElement.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--white); border: 1.5px solid var(--cream-border); border-radius: var(--r-lg); box-shadow: 0 2px 8px rgba(0,0,0,0.02);';
         
+        // Href points to editDog.html
         pupElement.innerHTML = `
           <div style="display: flex; align-items: center; gap: 16px;">
             <div style="width: 56px; height: 56px; font-size: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--cream); flex-shrink: 0;">
@@ -358,7 +358,7 @@
               <p style="font-size: 0.85rem; margin: 0; color: var(--text-soft);">${pup.breed} · ${pup.age}</p>
             </div>
           </div>
-          <a href="#" class="btn-action" style="padding: 8px 16px; font-size: 0.85rem; margin-top: 0;">Edit</a>
+          <a href="editDog.html?id=${pup.id}" class="btn-action" style="padding: 8px 16px; font-size: 0.85rem; margin-top: 0;">Edit</a>
         `;
         
         pupsContainer.appendChild(pupElement);
