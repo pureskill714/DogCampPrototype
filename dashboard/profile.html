@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile – Fort Canning Dog Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  
+  <style>
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; background-color: var(--white, #fff); min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--cream-border, #e5dfd3); border-radius: var(--r-md, 8px); z-index: 100; top: 100%; left: 0; overflow: hidden; padding: 8px 0; }
+    .dropdown-content a { color: var(--text, #333); padding: 10px 20px; text-decoration: none; display: block; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+    .dropdown-content a:hover { background-color: var(--cream, #f7f5f0); color: var(--green-deep, #2C4C38); }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Profile Specific */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    
+    .mobile-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .country-code {
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .success-msg {
+      display: none;
+      background: var(--green-light);
+      color: var(--green-deep);
+      border: 1px solid var(--green);
+      padding: 12px 16px;
+      border-radius: var(--r-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">
+          Fort Canning
+          <span class="nav-logo-sub">Dog Camp · Singapore</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">My Pups ▾</a>
+          <div class="dropdown-content">
+            <a href="addDog.html">Add New Pup</a>
+            <a href="viewDog.html">View My Pups</a>
+          </div>
+        </li>
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">Bookings ▾</a>
+          <div class="dropdown-content">
+            <a href="#">Book Session</a>
+            <a href="#">Cancel Session</a>
+            <a href="#">Past Sessions</a>
+          </div>
+        </li>
+        
+        <li class="nav-item"><a href="profile.html" class="nav-link" style="color: var(--green); font-weight: 500;">Profile</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="../index.html" class="btn btn-outline">Log Out</a>
+      </div>
+      <button class="nav-burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="index.html">Dashboard</a>
+    
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); font-weight: 500; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">My Pups</span>
+      <a href="addDog.html" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Add New Pup</a>
+      <a href="viewDog.html" style="padding-left: 16px; font-size: 0.9rem;">↳ View My Pups</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+      <span style="font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Bookings</span>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none; padding-top: 8px;">↳ Book Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem; border-bottom: none;">↳ Cancel Session</a>
+      <a href="#" style="padding-left: 16px; font-size: 0.9rem;">↳ Past Sessions</a>
+    </div>
+
+    <a href="profile.html" style="color: var(--green); font-weight: 500;">Profile</a>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <a href="../index.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log Out</a>
+    </div>
+  </div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text-faint);margin-bottom:16px;transition:color .15s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-faint)'">
+      ← Back to Dashboard
+    </a>
+    <h1>Manage Your Profile</h1>
+    <p>Keep your contact details up to date so we can reach you regarding your pack.</p>
+  </div>
+</div>
+
+<div class="form-page-body">
+  <form id="profileForm">
+
+    <fieldset>
+      <legend>Account Details</legend>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="firstName">First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" required>
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name <span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address <span class="req">*</span></label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="field">
+        <label for="mobile">Mobile Number <span class="req">*</span></label>
+        <div class="mobile-input-group">
+          <select class="country-code" id="countryCode" name="countryCode" required>
+            <option value="+65">🇸🇬 +65</option>
+            <option value="+60">🇲🇾 +60</option>
+            <option value="+62">🇮🇩 +62</option>
+            <option value="+66">🇹🇭 +66</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+61">🇦🇺 +61</option>
+          </select>
+          <input type="tel" id="mobile" name="mobile" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit">Save Changes</button>
+    <div id="successMsg" class="success-msg">✅ Your profile has been updated successfully!</div>
+  </form>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:16px;">
+          <div class="nav-logo-icon">🐾</div>
+          <div class="nav-logo-text" style="color:white;">
+            Fort Canning Dog Camp
+            <span class="nav-logo-sub">Singapore</span>
+          </div>
+        </div>
+        <p>Professional dog training in the heart of Singapore.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Fort Canning Dog Camp. All rights reserved.</span>
+      <span class="footer-paw">Made with 🐾 in Singapore</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav toggles
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
+  const burger = document.getElementById('navBurger');
+  const mobileNav = document.getElementById('navMobile');
+  burger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  // Load / Initialize Profile Data
+  let userProfile = JSON.parse(localStorage.getItem('userProfile'));
+
+  // If no profile exists yet, create the hardcoded "Test User"
+  if (!userProfile) {
+    userProfile = {
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'test@example.com',
+      countryCode: '+65',
+      mobile: '91234567'
+    };
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+  }
+
+  // Populate the form fields with current data
+  document.getElementById('firstName').value = userProfile.firstName;
+  document.getElementById('lastName').value = userProfile.lastName;
+  document.getElementById('email').value = userProfile.email;
+  document.getElementById('countryCode').value = userProfile.countryCode;
+  document.getElementById('mobile').value = userProfile.mobile;
+
+  // Handle Form Submission
+  const profileForm = document.getElementById('profileForm');
+  const successMsg = document.getElementById('successMsg');
+
+  profileForm.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+
+    // Update the object with new values
+    userProfile.firstName = document.getElementById('firstName').value;
+    userProfile.lastName = document.getElementById('lastName').value;
+    userProfile.email = document.getElementById('email').value;
+    userProfile.countryCode = document.getElementById('countryCode').value;
+    userProfile.mobile = document.getElementById('mobile').value;
+
+    // Save back to LocalStorage
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+    // Show success message briefly
+    successMsg.style.display = 'block';
+    
+    // Optional: Hide message after 3 seconds
+    setTimeout(() => {
+      successMsg.style.display = 'none';
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>
