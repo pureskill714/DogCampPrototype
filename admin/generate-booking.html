@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal – Generate Bookings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --cream: #F9F8F6;
+      --cream-border: #E8E5DF;
+      --green: #3D6B4F;
+      --green-deep: #274734;
+      --green-light: #EAF3EC;
+      --text: #2D2A26;
+      --text-soft: #5C5955;
+      --white: #FFFFFF;
+      --danger: #D9534F;
+      --danger-light: #FDF2F2;
+      --gray-light: #F0F0F0;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --r-xl: 24px;
+      --r-pill: 99px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: var(--text);
+      margin: 0;
+      padding: 60px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .admin-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .page-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      margin: 0;
+      color: var(--green-deep);
+    }
+
+    /* Card Layouts */
+    .admin-card {
+      background: var(--white);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-xl);
+      padding: 32px;
+      box-shadow: 0 8px 24px rgba(45,42,38,0.04);
+    }
+
+    .card-header {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--cream-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Filter Bar Styles */
+    .dashboard-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      background: var(--cream);
+      padding: 16px;
+      border-radius: var(--r-md);
+      border: 1px solid var(--cream-border);
+    }
+
+    .date-range-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    input[type="text"], input[type="date"], input[type="time"], select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    input.date-filter-input {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    select.filter-select {
+      width: auto;
+      padding: 8px 32px 8px 16px;
+      font-weight: 600;
+      background-color: var(--white);
+      cursor: pointer;
+    }
+
+    /* Dynamic Date Rows */
+    .date-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 16px;
+      align-items: flex-end;
+      background: var(--cream);
+      padding: 16px;
+      border-radius: var(--r-md);
+      margin-bottom: 16px;
+      border: 1px solid var(--cream-border);
+    }
+
+    @media (max-width: 600px) {
+      .date-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+
+    /* Form Error Banner */
+    .form-error {
+      background-color: var(--danger-light);
+      color: var(--danger);
+      padding: 12px 16px;
+      border-radius: var(--r-md);
+      margin-top: 10px;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none; /* Hidden by default */
+      border: 1px solid rgba(217, 83, 79, 0.2);
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 12px 24px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+      width: 100%;
+      justify-content: center;
+      font-size: 1.1rem;
+      padding: 16px;
+    }
+
+    .btn-primary:hover { background: var(--green-deep); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--green);
+      color: var(--green);
+    }
+    
+    .btn-outline:hover {
+      background: var(--green-light);
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-delete {
+      background: var(--danger-light);
+      color: var(--danger);
+      padding: 10px 16px;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger);
+      color: var(--white);
+    }
+
+    .btn-remove-row {
+      background: transparent;
+      color: var(--text-soft);
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: var(--r-md);
+    }
+    
+    .btn-remove-row:hover {
+      background: #E8E5DF;
+      color: var(--danger);
+    }
+
+    /* Dashboard List */
+    .session-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .session-item {
+      background: var(--white);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .session-item.cancelled {
+      background: var(--gray-light);
+      opacity: 0.8;
+    }
+
+    @media (max-width: 600px) {
+      .session-item {
+        flex-direction: column;
+      }
+    }
+
+    .session-details h3 {
+      margin: 0 0 12px 0;
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      color: var(--green-deep);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      font-weight: 600;
+    }
+
+    .badge-upcoming { background: var(--green-light); color: var(--green-deep); }
+    .badge-past { background: #E8E5DF; color: var(--text-soft); }
+    .badge-cancelled { background: var(--danger-light); color: var(--danger); }
+
+    .session-schedule {
+      margin-bottom: 16px;
+    }
+
+    .schedule-day {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .schedule-day strong {
+      color: var(--text);
+    }
+
+    .slots-badge {
+      display: inline-block;
+      background: var(--cream);
+      border: 1px solid var(--cream-border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: var(--r-pill);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-soft);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <h1 class="page-title">⚙️ Generate Bookings</h1>
+
+    <div class="admin-card">
+      <h2 class="card-header">Create New Camp Package</h2>
+      
+      <div class="form-group">
+        <label for="packageName">Package Title</label>
+        <input type="text" id="packageName" placeholder="e.g., 3-Day Agility & Socialization Camp">
+      </div>
+
+      <div class="form-group">
+        <label>Session Dates & Timings (Multi-day Package)</label>
+        <p style="font-size: 0.85rem; color: var(--text-soft); margin-top: 0;">Add the specific dates and operating hours for this package.</p>
+        
+        <div id="dateRowsContainer">
+          </div>
+
+        <button class="btn btn-outline" id="addDateBtn" style="margin-top: 8px;">+ Add Another Date</button>
+      </div>
+
+      <div id="formError" class="form-error"></div>
+
+      <button class="btn btn-primary" id="createSessionBtn">Publish Session Package</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="dashboard-controls">
+        <h2 class="card-header" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Package Dashboard</h2>
+        
+        <div class="filter-row">
+          <select id="sessionFilter" class="filter-select">
+            <option value="upcoming">Upcoming Sessions</option>
+            <option value="all">All Sessions</option>
+            <option value="past">Past Sessions</option>
+            <option value="cancelled">Cancelled Sessions</option>
+          </select>
+
+          <div class="date-range-group">
+            <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-soft);">Dates:</span>
+            <input type="date" id="startDateFilter" class="date-filter-input">
+            <span style="color: var(--text-soft); font-size: 0.9rem;">to</span>
+            <input type="date" id="endDateFilter" class="date-filter-input">
+            <button class="btn btn-outline btn-small" id="clearDatesBtn">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sessionListContainer" class="session-list" style="margin-top: 24px;">
+        </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let dateRows = [{ id: Date.now(), date: '', startTime: '', endTime: '' }];
+    let allSessions = []; 
+
+    // DOM Elements
+    const dateRowsContainer = document.getElementById('dateRowsContainer');
+    const addDateBtn = document.getElementById('addDateBtn');
+    const createSessionBtn = document.getElementById('createSessionBtn');
+    const sessionListContainer = document.getElementById('sessionListContainer');
+    const packageNameInput = document.getElementById('packageName');
+    const formError = document.getElementById('formError'); // The new error container
+    
+    // Filter Elements
+    const sessionFilter = document.getElementById('sessionFilter');
+    const startDateFilter = document.getElementById('startDateFilter');
+    const endDateFilter = document.getElementById('endDateFilter');
+    const clearDatesBtn = document.getElementById('clearDatesBtn');
+
+    // Filter event listeners
+    sessionFilter.addEventListener('change', renderDashboard);
+    startDateFilter.addEventListener('change', renderDashboard);
+    endDateFilter.addEventListener('change', renderDashboard);
+    clearDatesBtn.addEventListener('click', () => {
+      startDateFilter.value = '';
+      endDateFilter.value = '';
+      renderDashboard();
+    });
+
+    // Helper to display the error message dynamically
+    function showError(message) {
+      formError.textContent = '⚠️ ' + message;
+      formError.style.display = 'block';
+    }
+
+    // --- Form Handling ---
+    function renderDateRows() {
+      dateRowsContainer.innerHTML = '';
+      
+      dateRows.forEach((row, index) => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'date-row';
+        rowEl.innerHTML = `
+          <div>
+            <label style="font-size: 0.85rem;">Date ${index + 1}</label>
+            <input type="date" class="date-input" data-id="${row.id}" value="${row.date}">
+          </div>
+          <div>
+            <label style="font-size: 0.85rem;">Start</label>
+            <input type="time" class="start-input" data-id="${row.id}" value="${row.startTime}">
+          </div>
+          <div>
+            <label style="font-size: 0.85rem;">End</label>
+            <input type="time" class="end-input" data-id="${row.id}" value="${row.endTime}">
+          </div>
+          ${dateRows.length > 1 ? `<button class="btn btn-remove-row" onclick="removeDateRow(${row.id})" aria-label="Remove Date">✕</button>` : '<div></div>'}
+        `;
+        dateRowsContainer.appendChild(rowEl);
+      });
+
+      // Clear error when user interacts with inputs again
+      document.querySelectorAll('.date-input, .start-input, .end-input, #packageName').forEach(input => {
+        input.addEventListener('input', () => {
+          formError.style.display = 'none';
+        });
+        
+        input.addEventListener('change', (e) => {
+          if (e.target.id === 'packageName') return; // Handled differently
+          
+          const id = parseInt(e.target.dataset.id);
+          const field = e.target.className.split('-')[0];
+          const rowIdx = dateRows.findIndex(r => r.id === id);
+          
+          if(field === 'date') dateRows[rowIdx].date = e.target.value;
+          if(field === 'start') dateRows[rowIdx].startTime = e.target.value;
+          if(field === 'end') dateRows[rowIdx].endTime = e.target.value;
+        });
+      });
+    }
+
+    addDateBtn.addEventListener('click', () => {
+      dateRows.push({ id: Date.now(), date: '', startTime: '', endTime: '' });
+      renderDateRows();
+      formError.style.display = 'none'; // clear error on new row
+    });
+
+    window.removeDateRow = function(id) {
+      dateRows = dateRows.filter(row => row.id !== id);
+      renderDateRows();
+      formError.style.display = 'none'; // clear error when removing row
+    };
+
+    // --- Utility Functions ---
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      const [hour, minute] = timeStr.split(':');
+      let h = parseInt(hour);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${h}:${minute} ${ampm}`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      const [year, month, day] = dateStr.split('-');
+      return new Date(year, month - 1, day).toLocaleDateString('en-US', options);
+    }
+
+    function determineSessionState(session) {
+      if (session.status === 'cancelled') return 'cancelled';
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // A session is "past" if ALL of its dates are strictly before today
+      const isPast = session.schedule.every(dayObj => {
+        const [year, month, day] = dayObj.date.split('-');
+        const sessionDate = new Date(year, month - 1, day);
+        return sessionDate < today;
+      });
+
+      return isPast ? 'past' : 'upcoming';
+    }
+
+    // --- Core Render Logic ---
+    function renderDashboard() {
+      sessionListContainer.innerHTML = '';
+      
+      const filterMode = sessionFilter.value;
+      const startFilterVal = startDateFilter.value ? new Date(startDateFilter.value).setHours(0,0,0,0) : null;
+      const endFilterVal = endDateFilter.value ? new Date(endDateFilter.value).setHours(23,59,59,999) : null;
+
+      const filteredSessions = allSessions.filter(session => {
+        // 1. Check Status Filter
+        const state = determineSessionState(session);
+        if (filterMode !== 'all' && state !== filterMode) return false;
+
+        // 2. Check Date Range Filter
+        if (startFilterVal !== null || endFilterVal !== null) {
+          const fallsInRange = session.schedule.some(dayObj => {
+            const [year, month, day] = dayObj.date.split('-');
+            const dayTime = new Date(year, month - 1, day).getTime();
+            
+            let matchesStart = true;
+            let matchesEnd = true;
+            
+            if (startFilterVal !== null) matchesStart = dayTime >= startFilterVal;
+            if (endFilterVal !== null) matchesEnd = dayTime <= endFilterVal;
+            
+            return matchesStart && matchesEnd;
+          });
+          
+          if (!fallsInRange) return false;
+        }
+
+        return true;
+      });
+
+      if (filteredSessions.length === 0) {
+        sessionListContainer.innerHTML = `<div class="empty-state">No packages match your selected filters.</div>`;
+        return;
+      }
+
+      filteredSessions.forEach(session => {
+        const state = determineSessionState(session);
+        const item = document.createElement('div');
+        item.className = `session-item ${state === 'cancelled' ? 'cancelled' : ''}`;
+        
+        let badgeHTML = '';
+        if (state === 'upcoming') badgeHTML = `<span class="status-badge badge-upcoming">Upcoming</span>`;
+        if (state === 'past') badgeHTML = `<span class="status-badge badge-past">Past</span>`;
+        if (state === 'cancelled') badgeHTML = `<span class="status-badge badge-cancelled">Cancelled</span>`;
+
+        let scheduleHTML = '';
+        session.schedule.forEach(day => {
+          scheduleHTML += `
+            <div class="schedule-day">
+              <strong>📅 ${formatDate(day.date)}</strong>
+              <span style="color: var(--text-soft);">🕒 ${formatTime(day.startTime)} - ${formatTime(day.endTime)}</span>
+            </div>
+          `;
+        });
+
+        item.innerHTML = `
+          <div class="session-details" style="flex: 1;">
+            <h3>${session.title} ${badgeHTML}</h3>
+            <div class="session-schedule">
+              ${scheduleHTML}
+            </div>
+            <div class="slots-badge">🐾 ${session.slotsAvailable} / ${session.totalSlots} Slots Available</div>
+          </div>
+          ${state !== 'cancelled' ? `<button class="btn btn-delete" onclick="cancelSession(${session.id})">Cancel Session</button>` : ''}
+        `;
+
+        sessionListContainer.appendChild(item);
+      });
+    }
+
+    createSessionBtn.addEventListener('click', () => {
+      // Hide any existing errors on fresh click
+      formError.style.display = 'none';
+
+      const title = packageNameInput.value.trim();
+      
+      // Basic Validations using the new dynamic error function
+      if (!title) return showError('Please enter a Package Title.');
+      
+      const invalidDates = dateRows.some(r => !r.date || !r.startTime || !r.endTime);
+      if (invalidDates) return showError('Please fill in all date and time fields.');
+
+      // Time Chronology Validation
+      const invalidTimeOrder = dateRows.some(r => r.startTime >= r.endTime);
+      if (invalidTimeOrder) {
+        return showError('The End Time must be later than the Start Time for all scheduled dates.');
+      }
+
+      // If validation passes, create the session
+      const newSession = {
+        id: Date.now(),
+        title: title,
+        schedule: [...dateRows],
+        totalSlots: 6,
+        slotsAvailable: 6,
+        status: 'active'
+      };
+
+      allSessions.unshift(newSession); 
+      
+      // Reset Form
+      packageNameInput.value = '';
+      dateRows = [{ id: Date.now(), date: '', startTime: '', endTime: '' }];
+      
+      renderDateRows();
+      
+      startDateFilter.value = '';
+      endDateFilter.value = '';
+      if (sessionFilter.value === 'past' || sessionFilter.value === 'cancelled') {
+        sessionFilter.value = 'upcoming';
+      }
+      
+      renderDashboard();
+    });
+
+    window.cancelSession = function(id) {
+      if(confirm('Are you sure you want to cancel this package? This cannot be undone.')) {
+        const session = allSessions.find(s => s.id === id);
+        if(session) session.status = 'cancelled';
+        renderDashboard();
+      }
+    };
+
+    // Initialize
+    renderDateRows();
+    renderDashboard();
+  </script>
+</body>
+</html>
