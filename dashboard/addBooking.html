@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../styles.css">
   
   <style>
-    /* Add Custom Styles matching the Add Dog page */
+    /* Dropdown Styles */
     .dropdown { position: relative; display: inline-block; }
     .dropdown-content { display: none; position: absolute; background-color: var(--white, #fff); min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--cream-border, #e5dfd3); border-radius: var(--r-md, 8px); z-index: 100; top: 100%; left: 0; overflow: hidden; padding: 8px 0; }
     .dropdown-content a { color: var(--text, #333); padding: 10px 20px; text-decoration: none; display: block; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
@@ -61,11 +61,13 @@
     </div>
   </nav>
 
-  <div class="page-hero" style="background: var(--green-deep); color: white; padding: 120px 20px 60px; text-align: center;">
-    <div class="page-hero-inner" style="max-width: 600px; margin: 0 auto;">
-      <a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem;">← Back to Dashboard</a>
-      <h1 style="font-family: 'Fraunces', serif; font-size: 2.5rem; margin: 16px 0;">Book a Session</h1>
-      <p style="opacity: 0.9;">Select an available camp package and choose which of your pups is attending!</p>
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text-faint);margin-bottom:16px;transition:color .15s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-faint)'">
+        ← Back to Dashboard
+      </a>
+      <h1>Book a Session</h1>
+      <p>Select an available camp package and choose which of your pups is attending!</p>
     </div>
   </div>
 
@@ -90,6 +92,27 @@
       <button type="submit" class="btn-submit" id="submitBtn">Confirm Booking</button>
     </form>
   </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:16px;">
+            <div class="nav-logo-icon">🐾</div>
+            <div class="nav-logo-text" style="color:white;">
+              Fort Canning Dog Camp
+              <span class="nav-logo-sub">Singapore</span>
+            </div>
+          </div>
+          <p>Professional dog training in the heart of Singapore.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fort Canning Dog Camp. All rights reserved.</span>
+        <span class="footer-paw">Made with 🐾 in Singapore</span>
+      </div>
+    </div>
+  </footer>
 
   <script>
     // --- LOAD DATA ---
