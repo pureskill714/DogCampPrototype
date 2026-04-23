@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Session – Fort Canning Dog Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  
+  <style>
+    /* Add Custom Styles matching the Add Dog page */
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; background-color: var(--white, #fff); min-width: 160px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--cream-border, #e5dfd3); border-radius: var(--r-md, 8px); z-index: 100; top: 100%; left: 0; overflow: hidden; padding: 8px 0; }
+    .dropdown-content a { color: var(--text, #333); padding: 10px 20px; text-decoration: none; display: block; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+    .dropdown-content a:hover { background-color: var(--cream, #f7f5f0); color: var(--green-deep, #2C4C38); }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Forms */
+    .form-page-body { max-width: 700px; margin: 0 auto; padding: 40px 20px 80px; }
+    .field { margin-bottom: 24px; }
+    .field label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+    select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--cream-border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 1rem; cursor: pointer; }
+    select:focus { outline: none; border-color: var(--green); }
+    
+    .btn-submit { background: var(--green); color: white; border: none; padding: 16px 32px; border-radius: 99px; font-family: 'DM Sans', sans-serif; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.2s; }
+    .btn-submit:hover { background: var(--green-deep); }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+
+    .session-preview { margin-top: 12px; padding: 16px; background: var(--cream); border-radius: 12px; border: 1px solid var(--cream-border); font-size: 0.9rem; display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">Fort Canning<span class="nav-logo-sub">Dog Camp · Singapore</span></div>
+      </a>
+      <ul class="nav-links">
+        <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">My Pups ▾</a>
+          <div class="dropdown-content">
+            <a href="addDog.html">Add New Pup</a>
+            <a href="#">View My Pups</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link" style="color: var(--green); font-weight: 500;">Bookings ▾</a>
+          <div class="dropdown-content">
+            <a href="addBooking.html">Book Session</a>
+            <a href="#">Cancel Session</a>
+            <a href="#">Past Sessions</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-hero" style="background: var(--green-deep); color: white; padding: 120px 20px 60px; text-align: center;">
+    <div class="page-hero-inner" style="max-width: 600px; margin: 0 auto;">
+      <a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem;">← Back to Dashboard</a>
+      <h1 style="font-family: 'Fraunces', serif; font-size: 2.5rem; margin: 16px 0;">Book a Session</h1>
+      <p style="opacity: 0.9;">Select an available camp package and choose which of your pups is attending!</p>
+    </div>
+  </div>
+
+  <div class="form-page-body">
+    <form id="bookingForm">
+      
+      <div class="field">
+        <label for="sessionSelect">1. Choose a Camp Package</label>
+        <select id="sessionSelect" required>
+          <option value="">Loading available sessions...</option>
+        </select>
+        <div id="sessionPreview" class="session-preview"></div>
+      </div>
+
+      <div class="field">
+        <label for="pupSelect">2. Which Pup is Attending?</label>
+        <select id="pupSelect" required>
+          <option value="">Loading your pups...</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Confirm Booking</button>
+    </form>
+  </div>
+
+  <script>
+    // --- LOAD DATA ---
+    let campSessions = JSON.parse(localStorage.getItem('campSessions')) || [];
+    let myPups = JSON.parse(localStorage.getItem('campPups')) || [];
+    let myBookedPackages = JSON.parse(localStorage.getItem('myBookedPackages')) || [];
+
+    const sessionSelect = document.getElementById('sessionSelect');
+    const pupSelect = document.getElementById('pupSelect');
+    const submitBtn = document.getElementById('submitBtn');
+    const sessionPreview = document.getElementById('sessionPreview');
+
+    // Utility formats
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      const [hour, minute] = timeStr.split(':');
+      let h = parseInt(hour); const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12; return `${h}:${minute} ${ampm}`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const options = { weekday: 'short', month: 'short', day: 'numeric' };
+      const [year, month, day] = dateStr.split('-');
+      return new Date(year, month - 1, day).toLocaleDateString('en-US', options);
+    }
+
+    // Populate Sessions (Only Active and >0 Slots)
+    const availableSessions = campSessions.filter(s => s.status === 'active' && s.slotsAvailable > 0);
+    
+    if (availableSessions.length === 0) {
+      sessionSelect.innerHTML = '<option value="">No sessions currently available</option>';
+      sessionSelect.disabled = true;
+      submitBtn.disabled = true;
+    } else {
+      sessionSelect.innerHTML = '<option value="">-- Select a Package --</option>';
+      availableSessions.forEach(session => {
+        sessionSelect.innerHTML += `<option value="${session.id}">${session.title} (${session.slotsAvailable} slots left)</option>`;
+      });
+    }
+
+    // Populate Pups
+    if (myPups.length === 0) {
+      pupSelect.innerHTML = '<option value="">You must add a pup profile first!</option>';
+      pupSelect.disabled = true;
+      submitBtn.disabled = true;
+    } else {
+      pupSelect.innerHTML = '<option value="">-- Select Your Pup --</option>';
+      myPups.forEach(pup => {
+        pupSelect.innerHTML += `<option value="${pup.id}">${pup.name} (${pup.breed})</option>`;
+      });
+    }
+
+    // Show Preview of selected session dates
+    sessionSelect.addEventListener('change', (e) => {
+      const selectedId = parseInt(e.target.value);
+      const session = availableSessions.find(s => s.id === selectedId);
+      
+      if (session) {
+        let scheduleHTML = '<strong>Package Schedule:</strong><ul style="margin: 8px 0 0; padding-left: 20px;">';
+        session.schedule.forEach(day => {
+          scheduleHTML += `<li>${formatDate(day.date)} @ ${formatTime(day.startTime)} - ${formatTime(day.endTime)}</li>`;
+        });
+        scheduleHTML += '</ul>';
+        sessionPreview.innerHTML = scheduleHTML;
+        sessionPreview.style.display = 'block';
+      } else {
+        sessionPreview.style.display = 'none';
+      }
+    });
+
+    // Handle Booking Submission
+    document.getElementById('bookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const selectedSessionId = parseInt(sessionSelect.value);
+      const selectedPupId = parseInt(pupSelect.value);
+
+      // Find references
+      const sessionIndex = campSessions.findIndex(s => s.id === selectedSessionId);
+      const selectedPup = myPups.find(p => p.id === selectedPupId);
+
+      if (sessionIndex === -1 || !selectedPup) return alert('Error processing booking.');
+
+      // 1. Decrement slots in the global camp sessions
+      campSessions[sessionIndex].slotsAvailable -= 1;
+
+      // 2. Add to user's booked packages
+      const newBooking = {
+        sessionId: campSessions[sessionIndex].id,
+        title: campSessions[sessionIndex].title,
+        schedule: campSessions[sessionIndex].schedule, // Clone schedule for display
+        pupName: selectedPup.name
+      };
+
+      myBookedPackages.push(newBooking);
+
+      // 3. Save both to LocalStorage
+      localStorage.setItem('campSessions', JSON.stringify(campSessions));
+      localStorage.setItem('myBookedPackages', JSON.stringify(myBookedPackages));
+
+      // 4. Redirect to Dashboard
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

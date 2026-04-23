@@ -218,7 +218,7 @@
         <li class="nav-item dropdown">
           <a href="#" class="nav-link">Bookings ▾</a>
           <div class="dropdown-content">
-            <a href="#">Book Session</a>
+            <a href="addBooking.html">Book Session</a>
             <a href="#">Cancel Session</a>
             <a href="#">Past Sessions</a>
           </div>
@@ -264,7 +264,7 @@
         <h1 class="dash-greeting">Welcome back, <em>Test User!</em> 👋</h1>
         <p class="dash-sub">Here is what's happening with your pack today.</p>
       </div>
-      <a href="#" class="btn-action">🎟️ Book New Session</a>
+      <a href="addBooking.html" class="btn-action">🎟️ Book New Session</a>
     </div>
 
     <div class="dash-grid">
@@ -353,30 +353,7 @@
 
     // --- Dynamic Bookings Logic (Multi-Day Packages) ---
     // Mocking customer packages with status removed
-    let myBookedPackages = JSON.parse(localStorage.getItem('myBookedPackages'));
-
-    if (!myBookedPackages || myBookedPackages.length === 0) {
-      myBookedPackages = [
-        {
-          id: 101,
-          title: "3-Day Spring Agility Camp",
-          schedule: [
-            { date: "2026-05-15", startTime: "09:00", endTime: "11:00" },
-            { date: "2026-05-16", startTime: "09:00", endTime: "11:00" },
-            { date: "2026-05-17", startTime: "09:00", endTime: "11:00" }
-          ]
-        },
-        {
-          id: 102,
-          title: "Weekend Socialization Intensive",
-          schedule: [
-            { date: "2026-06-06", startTime: "14:00", endTime: "16:30" },
-            { date: "2026-06-07", startTime: "14:00", endTime: "16:30" }
-          ]
-        }
-      ];
-      localStorage.setItem('myBookedPackages', JSON.stringify(myBookedPackages));
-    }
+    let myBookedPackages = JSON.parse(localStorage.getItem('myBookedPackages')) || [];
 
     const bookingsContainer = document.getElementById('bookingsListContainer');
 
