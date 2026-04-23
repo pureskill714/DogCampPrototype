@@ -99,32 +99,34 @@
 
     .booking-item {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column; 
       padding: 16px;
       background: var(--cream, #F9F8F6);
       border-radius: var(--r-lg, 16px);
       border: 1px solid var(--cream-border, #E8E5DF);
     }
 
-    .booking-date {
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .booking-title {
       font-weight: 600;
+      font-size: 1.1rem;
       color: var(--green-deep, #274734);
     }
 
     .booking-time {
       font-size: 0.85rem;
       color: var(--text-soft, #5C5955);
-      margin-top: 4px;
-    }
-
-    .status-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 99px;
-      background: var(--green-light, #EAF3EC);
-      color: var(--green-deep, #274734);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn-action {
@@ -268,23 +270,9 @@
     <div class="dash-grid">
       
       <div class="dash-card">
-        <h2 class="dash-card-title">📅 Upcoming Sessions</h2>
-        <div class="booking-list">
-          <div class="booking-item">
-            <div>
-              <div class="booking-date">Saturday, April 18</div>
-              <div class="booking-time">Morning Trail Walk (9:00 AM - 11:00 AM)</div>
-            </div>
-            <div class="status-badge">Confirmed</div>
+        <h2 class="dash-card-title">📅 My Upcoming Camps</h2>
+        <div id="bookingsListContainer" class="booking-list">
           </div>
-          <div class="booking-item">
-            <div>
-              <div class="booking-date">Wednesday, April 22</div>
-              <div class="booking-time">Agility Training (3:00 PM - 5:00 PM)</div>
-            </div>
-            <div class="status-badge" style="background: var(--amber-light); color: #B25E02;">Pending</div>
-          </div>
-        </div>
       </div>
 
       <div class="dash-card" style="display: flex; flex-direction: column; align-items: flex-start;">
@@ -326,10 +314,9 @@
       });
     });
 
-    // Dynamic Pups Logic
+    // --- Dynamic Pups Logic ---
     let myPups = JSON.parse(localStorage.getItem('campPups'));
 
-    // Initialize mock data if storage is empty
     if (!myPups || myPups.length === 0) {
       myPups = [
         { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: '3 Years', avatar: '🦮' },
@@ -347,7 +334,6 @@
         const pupElement = document.createElement('div');
         pupElement.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--white); border: 1.5px solid var(--cream-border); border-radius: var(--r-lg); box-shadow: 0 2px 8px rgba(0,0,0,0.02);';
         
-        // Href points to editDog.html
         pupElement.innerHTML = `
           <div style="display: flex; align-items: center; gap: 16px;">
             <div style="width: 56px; height: 56px; font-size: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--cream); flex-shrink: 0;">
@@ -365,7 +351,93 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', renderPups);
+    // --- Dynamic Bookings Logic (Multi-Day Packages) ---
+    // Mocking customer packages with status removed
+    let myBookedPackages = JSON.parse(localStorage.getItem('myBookedPackages'));
+
+    if (!myBookedPackages || myBookedPackages.length === 0) {
+      myBookedPackages = [
+        {
+          id: 101,
+          title: "3-Day Spring Agility Camp",
+          schedule: [
+            { date: "2026-05-15", startTime: "09:00", endTime: "11:00" },
+            { date: "2026-05-16", startTime: "09:00", endTime: "11:00" },
+            { date: "2026-05-17", startTime: "09:00", endTime: "11:00" }
+          ]
+        },
+        {
+          id: 102,
+          title: "Weekend Socialization Intensive",
+          schedule: [
+            { date: "2026-06-06", startTime: "14:00", endTime: "16:30" },
+            { date: "2026-06-07", startTime: "14:00", endTime: "16:30" }
+          ]
+        }
+      ];
+      localStorage.setItem('myBookedPackages', JSON.stringify(myBookedPackages));
+    }
+
+    const bookingsContainer = document.getElementById('bookingsListContainer');
+
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      const [hour, minute] = timeStr.split(':');
+      let h = parseInt(hour);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${h}:${minute} ${ampm}`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      const [year, month, day] = dateStr.split('-');
+      return new Date(year, month - 1, day).toLocaleDateString('en-US', options);
+    }
+
+    function renderBookings() {
+      bookingsContainer.innerHTML = '';
+
+      if (myBookedPackages.length === 0) {
+        bookingsContainer.innerHTML = '<p style="color: var(--text-soft); font-style: italic;">You have no upcoming camp packages booked.</p>';
+        return;
+      }
+
+      myBookedPackages.forEach(pkg => {
+        const item = document.createElement('div');
+        item.className = 'booking-item';
+
+        // Generate the schedule list
+        let scheduleHTML = '';
+        pkg.schedule.forEach(day => {
+          scheduleHTML += `
+            <div class="booking-time">
+              <span>📅 ${formatDate(day.date)}</span>
+              <span>🕒 ${formatTime(day.startTime)} - ${formatTime(day.endTime)}</span>
+            </div>
+          `;
+        });
+
+        // Removed the status badge element from the header
+        item.innerHTML = `
+          <div class="booking-header">
+            <div class="booking-title">${pkg.title}</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            ${scheduleHTML}
+          </div>
+        `;
+        
+        bookingsContainer.appendChild(item);
+      });
+    }
+
+    // Initialize both lists on load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPups();
+      renderBookings();
+    });
   </script>
 
 </body>
