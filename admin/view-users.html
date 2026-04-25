@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal – View External Users</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root { 
+      --cream: #F9F8F6; --cream-border: #E8E5DF; --green: #3D6B4F; 
+      --green-deep: #274734; --green-light: #EAF3EC; --text: #2D2A26; 
+      --text-soft: #5C5955; --white: #FFFFFF; --danger: #D9534F; 
+      --danger-light: #FDF2F2; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-pill: 99px; 
+    }
+    
+    body { 
+      font-family: 'DM Sans', sans-serif; background-color: var(--cream); 
+      background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px); 
+      background-size: 32px 32px; color: var(--text); margin: 0; padding: 0; 
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      background: var(--white);
+      border-bottom: 1.5px solid var(--cream-border);
+      padding: 0 40px;
+      height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+    .nav-logo { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--green-deep); text-decoration: none; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { text-decoration: none; color: var(--text-soft); font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    
+    .admin-container { width: 100%; max-width: 1000px; margin: 40px auto; padding: 0 20px; box-sizing: border-box; }
+    .page-title { font-family: 'Fraunces', serif; font-size: 2.5rem; margin: 0 0 32px 0; color: var(--green-deep); }
+
+    /* User Table Card */
+    .admin-card { background: var(--white); border: 1.5px solid var(--cream-border); border-radius: var(--r-xl); box-shadow: 0 8px 24px rgba(45,42,38,0.04); overflow: hidden; }
+    .card-header { padding: 24px; border-bottom: 1px solid var(--cream-border); display: flex; justify-content: space-between; align-items: center; }
+    .card-header h2 { font-family: 'Fraunces', serif; margin: 0; color: var(--green-deep); font-size: 1.5rem; }
+
+    .user-count-badge { background: var(--green-light); color: var(--green-deep); padding: 6px 14px; border-radius: var(--r-pill); font-weight: 600; font-size: 0.85rem; }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 16px; background: var(--cream); color: var(--text-soft); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--cream-border); }
+    td { padding: 16px; border-bottom: 1px solid var(--cream-border); font-size: 0.95rem; color: var(--text); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+
+    .avatar-circle { width: 36px; height: 36px; background: var(--green-light); color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+    .user-name { font-weight: 600; color: var(--text); }
+    .user-email { font-size: 0.85rem; color: var(--text-soft); }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); font-style: italic; }
+    
+    .btn-danger-small { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 12px; border-radius: var(--r-pill); font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+    .btn-danger-small:hover { background: var(--danger-light); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-logo">🌿 Admin Portal</a>
+    <div class="nav-links">
+      <a href="index.html">Dashboard</a>
+      <a href="generate-booking.html">Generate Booking</a>
+      <a href="view-bookings.html">View Bookings</a>
+      <a href="view-users.html" class="active">View External Users</a>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    <h1 class="page-title">👥 Registered External Users</h1>
+
+    <div class="admin-card">
+      <div class="card-header">
+        <h2>User Roster</h2>
+        <div id="userCount" class="user-count-badge">0 Users Registered</div>
+      </div>
+
+      <div id="tableContainer">
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th style="width: 50px;"></th>
+              <th>User Details</th>
+              <th>Role</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userListBody">
+            </tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          No external users have registered yet. 🐾
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function renderUsers() {
+      const userListBody = document.getElementById('userListBody');
+      const userCountBadge = document.getElementById('userCount');
+      const emptyState = document.getElementById('emptyState');
+      const userTable = document.getElementById('userTable');
+
+      // 1. Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+      // 2. Update UI State
+      if (users.length === 0) {
+        userTable.style.display = 'none';
+        emptyState.style.display = 'block';
+        userCountBadge.textContent = "0 Users Registered";
+        return;
+      }
+
+      userTable.style.display = 'table';
+      emptyState.style.display = 'none';
+      userCountBadge.textContent = `${users.length} User${users.length > 1 ? 's' : ''} Registered`;
+
+      // 3. Render Rows
+      userListBody.innerHTML = '';
+      users.forEach((user, index) => {
+        const firstInitial = user.firstName ? user.firstName.charAt(0).toUpperCase() : '?';
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td>
+            <div class="avatar-circle">${firstInitial}</div>
+          </td>
+          <td>
+            <div class="user-name">${user.firstName || 'Unknown'} ${user.lastName || ''}</div>
+            <div class="user-email">${user.email}</div>
+          </td>
+          <td><span style="font-size: 0.85rem; color: var(--text-soft);">Pet Owner</span></td>
+          <td style="text-align: right;">
+            <button class="btn-danger-small" onclick="deleteUser('${user.email}')">Remove Access</button>
+          </td>
+        `;
+        userListBody.appendChild(row);
+      });
+    }
+
+    // Function to allow admin to remove a user (Optional)
+    window.deleteUser = function(email) {
+      if (confirm(`Are you sure you want to remove access for ${email}?`)) {
+        let users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+        users = users.filter(user => user.email !== email);
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+        renderUsers();
+      }
+    };
+
+    // Initial Render
+    renderUsers();
+  </script>
+</body>
+</html>
