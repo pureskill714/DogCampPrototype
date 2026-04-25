@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="styles.css">
 
   <style>
+    :root { 
+      --cream: #F9F8F6; --cream-border: #E8E5DF; --green: #3D6B4F; 
+      --green-deep: #274734; --green-light: #EAF3EC; --text: #2D2A26; 
+      --text-soft: #5C5955; --white: #FFFFFF; --danger: #D9534F; 
+      --danger-light: #FDF2F2; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-pill: 99px; 
+    }
+
     body.login-page {
       min-height: 100vh;
       display: flex;
@@ -18,64 +25,194 @@
       background-color: var(--cream);
       background-image: radial-gradient(circle, #C8B99A 1px, transparent 1px);
       background-size: 32px 32px;
+      margin: 0;
     }
-    .nav-bar {
-      background: var(--white);
-      border-bottom: 1.5px solid var(--cream-border);
-      padding: 0 40px;
-      height: 70px;
+
+    /* ── Login Card UI ── */
+    .login-wrapper {
+      flex: 1;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-sizing: border-box;
+      justify-content: center;
+      padding: 48px 20px;
     }
-    .nav-logo { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--green-deep); text-decoration: none; }
-    .nav-links { display: flex; gap: 24px; }
-    .nav-links a { text-decoration: none; color: var(--text-soft); font-weight: 500; font-size: 0.9rem; }
-    .login-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 20px; }
-    .login-card { background: var(--white); border: 1.5px solid var(--cream-border); border-radius: var(--r-xl); box-shadow: var(--shadow-lg); padding: 48px 44px 40px; width: 100%; max-width: 460px; position: relative; }
-    .login-heading { font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 4vw, 2rem); font-weight: 600; color: var(--text); margin-bottom: 6px; }
-    .login-heading em { color: var(--green); font-style: italic; }
-    .login-form { display: flex; flex-direction: column; gap: 18px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-input { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; background: var(--cream); border: 1.5px solid var(--cream-border); border-radius: var(--r-md); padding: 12px 16px; box-sizing: border-box; width: 100%; }
-    .login-error { display: none; background: #fdecea; color: #E05C4A; padding: 10px; border-radius: var(--r-md); font-size: 0.85rem; text-align: center; border: 1px solid #f5c6cb; }
-    .btn-login { background: var(--green); color: var(--white); font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; border: none; border-radius: var(--r-pill); padding: 14px 32px; cursor: pointer; width: 100%; margin-top: 10px; }
-    .login-register { text-align: center; font-size: 0.88rem; color: var(--text-soft); margin-top: 20px; padding-top: 20px; border-top: 1.5px solid var(--cream-border); }
-    .login-register a { color: var(--green); font-weight: 600; text-decoration: none; }
+
+    .login-card {
+      background: var(--white);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-xl);
+      box-shadow: 0 10px 30px rgba(45,42,38,0.05);
+      padding: 48px 44px 40px;
+      width: 100%;
+      max-width: 460px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .login-heading em {
+      color: var(--green);
+      font-style: italic;
+    }
+
+    .login-sub {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      margin-bottom: 32px;
+    }
+
+    /* ── Form ── */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-input {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      background: var(--cream);
+      border: 1.5px solid var(--cream-border);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green);
+      background: var(--white);
+    }
+
+    .login-error {
+      display: none;
+      background: var(--danger-light);
+      color: var(--danger);
+      padding: 12px;
+      border-radius: var(--r-md);
+      font-size: 0.85rem;
+      text-align: center;
+      border: 1px solid rgba(217, 83, 79, 0.15);
+    }
+
+    .btn-login {
+      background: var(--green);
+      color: var(--white);
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .btn-login:hover {
+      background: var(--green-deep);
+    }
+
+    .login-register {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1.5px solid var(--cream-border);
+    }
+
+    .login-register a {
+      color: var(--green);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .login-register a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body class="login-page">
 
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-logo">🌿 Admin Portal</a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="login.html" style="color: var(--green);">Log In</a>
-      <a href="registration/register.html">Register</a>
+  <nav class="nav" id="mainNav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🐾</div>
+        <div class="nav-logo-text">
+          Fort Canning
+          <span class="nav-logo-sub">Dog Camp · Singapore</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="index.html#about" class="nav-link">About Us</a></li>
+        <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact Us</a></li>
+        <li class="nav-item"><a href="index.html#faqs" class="nav-link">FAQs</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="login.html" class="btn btn-ghost active">Log In</a>
+        <a href="registration/register.html" class="btn btn-outline">Register</a>
+      </div>
+
+      <button class="nav-burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About Us</a>
+    <a href="index.html#contact">Contact Us</a>
+    <a href="index.html#faqs">FAQs</a>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      <a href="login.html" class="btn btn-outline" style="width:100%;justify-content:center;">Log In</a>
+      <a href="registration/register.html" class="btn btn-primary" style="width:100%;justify-content:center;">Register</a>
+    </div>
+  </div>
 
   <div class="login-wrapper">
     <div class="login-card">
       <h1 class="login-heading">Welcome <em>back!</em> 🐶</h1>
-      <p style="color: var(--text-faint); font-size: 0.9rem; margin-bottom: 32px;">Log in to manage your pup's profile and bookings.</p>
+      <p class="login-sub">Log in to manage your pup's profile and camp bookings.</p>
 
       <form class="login-form" id="loginForm">
         <div class="login-error" id="loginError">Incorrect email or password.</div>
 
         <div class="form-group">
-          <label style="font-size: 0.85rem; font-weight: 500;">📧 Email address</label>
-          <input class="form-input" type="email" id="email" placeholder="test@example.com" required>
+          <label class="form-label">📧 Email address</label>
+          <input class="form-input" type="email" id="email" placeholder="you@example.com" required>
         </div>
 
         <div class="form-group">
-          <label style="font-size: 0.85rem; font-weight: 500;">🔒 Password</label>
-          <input class="form-input" type="password" id="password" placeholder="password123" required>
+          <label class="form-label">🔒 Password</label>
+          <input class="form-input" type="password" id="password" placeholder="••••••••" required>
         </div>
 
         <button class="btn-login" type="submit">Let's go! 🐾</button>
@@ -88,6 +225,22 @@
   </div>
 
   <script>
+    // ── Sticky nav shadow ──
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ── Mobile burger ──
+    const burger = document.getElementById('navBurger');
+    const mobileNav = document.getElementById('navMobile');
+    burger.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    // ── Login Logic ──
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
 
@@ -97,20 +250,22 @@
       const emailValue = document.getElementById('email').value;
       const passwordValue = document.getElementById('password').value;
 
-      // Hardcoded Test Account
+      // 1. Hardcoded Test Account
       const TEST_EMAIL = "test@example.com";
       const TEST_PASSWORD = "password123";
 
-      // LocalStorage Accounts
+      // 2. LocalStorage Accounts
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-      const foundUser = registeredUsers.find(user => user.email === emailValue && user.password === passwordValue);
+      const foundUser = registeredUsers.find(user => 
+        user.email === emailValue && user.password === passwordValue
+      );
 
       if ((emailValue === TEST_EMAIL && passwordValue === TEST_PASSWORD) || foundUser) {
         loginError.style.display = 'none';
         
-        // Store current user session name
-        const displayName = foundUser ? foundUser.firstName : "Admin";
-        localStorage.setItem('currentUser', displayName);
+        // Save user session
+        localStorage.setItem('userEmail', emailValue);
+        localStorage.setItem('currentUser', foundUser ? foundUser.firstName : "Test User");
         
         window.location.href = 'dashboard/index.html'; 
       } else {
@@ -119,4 +274,5 @@
     });
   </script>
 </body>
+
 </html>
