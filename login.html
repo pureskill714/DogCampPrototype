@@ -250,17 +250,28 @@
       const emailValue = document.getElementById('email').value;
       const passwordValue = document.getElementById('password').value;
 
-      // 1. Hardcoded Test Account
+      // 1. Admin Hardcoded Credentials
+      const ADMIN_EMAIL = "admin@fortcanning.com";
+      const ADMIN_PASS = "fortcanning2026";
+
+      // 2. Hardcoded Test Account
       const TEST_EMAIL = "test@example.com";
       const TEST_PASSWORD = "password123";
 
-      // 2. LocalStorage Accounts
+      // 3. LocalStorage Accounts
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
       const foundUser = registeredUsers.find(user => 
         user.email === emailValue && user.password === passwordValue
       );
 
-      if ((emailValue === TEST_EMAIL && passwordValue === TEST_PASSWORD) || foundUser) {
+      // --- AUTHENTICATION FLOW ---
+
+      // Check for Admin first
+      if (emailValue === ADMIN_EMAIL && passwordValue === ADMIN_PASS) {
+        window.location.href = 'admin/index.html';
+      } 
+      // Check for regular user accounts
+      else if ((emailValue === TEST_EMAIL && passwordValue === TEST_PASSWORD) || foundUser) {
         loginError.style.display = 'none';
         
         // Save user session
@@ -268,7 +279,9 @@
         localStorage.setItem('currentUser', foundUser ? foundUser.firstName : "Test User");
         
         window.location.href = 'dashboard/index.html'; 
-      } else {
+      } 
+      // Failed login
+      else {
         loginError.style.display = 'block';
       }
     });

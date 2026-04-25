@@ -1,2 +1,7 @@
+External :
 test@example.com
 password123
+
+Admin:
+admin@fortcanning.com
+fortcanning2026
